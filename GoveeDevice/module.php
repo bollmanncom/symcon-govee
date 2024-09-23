@@ -9,7 +9,7 @@ class GoveeDevice extends IPSModule
         parent::Create();
 
         // Verbindung zum übergeordneten Modul herstellen
-        $this->ConnectParent('{9f57dc06-0ea2-41ce-9b12-fe766033d55d}'); // Govee IO UUID
+        $this->ConnectParent('{9F57DC06-0EA2-41CE-9B12-FE766033D55D}'); // Govee IO UUID
 
         // Eigenschaften registrieren
         $this->RegisterPropertyString('DeviceID', '');
@@ -21,7 +21,7 @@ class GoveeDevice extends IPSModule
         parent::ApplyChanges();
 
         // Verbindung zum übergeordneten Modul sicherstellen
-        $this->ConnectParent('{9f57dc06-0ea2-41ce-9b12-fe766033d55d}'); // Govee IO UUID
+        $this->ConnectParent('{9F57DC06-0EA2-41CE-9B12-FE766033D55D}'); // Govee IO UUID
 
         // Überprüfen, ob Geräte-ID und -Modell gesetzt sind
         if ($this->ReadPropertyString('DeviceID') == '' || $this->ReadPropertyString('DeviceModel') == '') {
@@ -119,7 +119,7 @@ class GoveeDevice extends IPSModule
     private function SendGoveeCommand($capability)
     {
         $data = [
-            'DataID' => '{e2cdd4c0-3e9f-4b4e-9d92-8c1f9b6f8b8b}',
+            'DataID' => '{E2CDD4C0-3E9F-4B4E-9D92-8C1F9B6F8B8B}',
             'DeviceID' => $this->ReadPropertyString('DeviceID'),
             'DeviceModel' => $this->ReadPropertyString('DeviceModel'),
             'Capability' => $capability,

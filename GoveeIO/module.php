@@ -43,7 +43,7 @@ class GoveeIO extends IPSModule
         $data = json_decode($JSONString, true);
 
         // Prüfen, ob die DataID übereinstimmt
-        if ($data['DataID'] !== '{e2cdd4c0-3e9f-4b4e-9d92-8c1f9b6f8b8b}') {
+        if ($data['DataID'] !== '{E2CDD4C0-3E9F-4B4E-9D92-8C1F9B6F8B8B}') {
             $this->SendDebug('ForwardData', 'Ungültige DataID erhalten', 0);
             return json_encode(['success' => false, 'error' => 'Invalid DataID']);
         }
@@ -55,7 +55,6 @@ class GoveeIO extends IPSModule
         return json_encode($result);
     }
 
-    // Funktion, um eine API-Anfrage zu senden
     private function SendAPIRequest($data)
     {
         // Implementieren Sie hier die Kommunikation mit der Govee API
