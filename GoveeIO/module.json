@@ -1,12 +1,18 @@
 {
-    "id": "{9F57DC06-0EA2-41CE-9B12-FE766033D55D}",
-    "name": "Govee IO",
-    "type": 1,
-    "vendor": "bollmann.com e.K.",
-    "aliases": ["Govee IO"],
-    "parentRequirements": [],
-    "childRequirements": ["{8E4E6F37-5435-431E-B058-01C253C3A021}"],
-    "implemented": ["{A1F66127-F016-4727-B70B-0C53111C13A0}"],
-    "prefix": "GOVEEIO"
-  }
-  
+  "id": "{9F57DC06-0EA2-41CE-9B12-FE766033D55D}",
+  "name": "Govee IO",
+  "type": 1,
+  "vendor": "",
+  "aliases": [
+      "Govee IO"
+  ],
+  "parentRequirements": [],
+  "childRequirements": [
+      "{5A2FDB7C-0D0A-F4CE-2B66-23119E653F4D}"
+  ],
+  "implemented": [
+      "{A774E62B-D3ED-031F-B5BB-876BC33076F8}"
+  ],
+  "prefix": "GOVEEIO",
+  "url": ""
+}
