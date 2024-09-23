@@ -3,16 +3,10 @@
     "name": "Govee IO",
     "type": 1,
     "vendor": "bollmann.com e.K.",
-    "aliases": [
-        "Govee IO"
-    ],
+    "aliases": ["Govee IO"],
     "parentRequirements": [],
-    "childRequirements": [
-        "{D4D6FC72-B91F-16EF-15E7-A95AA824C9FF}"
-    ],
-    "implemented": [
-        "{498C3BD0-8E57-3AD7-25AB-41C0F82EB3DD}"
-    ],
-    "prefix": "GOVEEIO",
-    "url": ""
-}
+    "childRequirements": ["{8E4E6F37-5435-431E-B058-01C253C3A021}"],
+    "implemented": ["{A1F66127-F016-4727-B70B-0C53111C13A0}"],
+    "prefix": "GOVEEIO"
+  }
+  

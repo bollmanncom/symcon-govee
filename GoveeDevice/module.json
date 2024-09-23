@@ -3,12 +3,10 @@
     "name": "Govee Device",
     "type": 3,
     "vendor": "bollmann.com e.K.",
-    "aliases": [
-        "Govee Device"
-    ],
-    "parentRequirements": [],
+    "aliases": ["Govee Device"],
+    "parentRequirements": ["{9F57DC06-0EA2-41CE-9B12-FE766033D55D}"],
     "childRequirements": [],
-    "implemented": [],
-    "prefix": "GOVEE",
-    "url": ""
-}
+    "implemented": ["{A1F66127-F016-4727-B70B-0C53111C13A0}"],
+    "prefix": "GOVEE"
+  }
+  
