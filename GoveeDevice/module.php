@@ -23,6 +23,12 @@ class GoveeDevice extends IPSModule
         // Verbindung zum übergeordneten Modul sicherstellen
         $this->ConnectParent('{9f57dc06-0ea2-41ce-9b12-fe766033d55d}'); // Govee IO UUID
 
+        // Überprüfen, ob Geräte-ID und -Modell gesetzt sind
+        if ($this->ReadPropertyString('DeviceID') == '' || $this->ReadPropertyString('DeviceModel') == '') {
+            $this->SetStatus(200); // Status auf inaktiv setzen
+            return;
+        }
+
         // Variablen registrieren
         $this->RegisterVariableBoolean('Status', 'Status', '~Switch', 1);
         $this->EnableAction('Status');
@@ -121,5 +127,11 @@ class GoveeDevice extends IPSModule
 
         $jsonResult = $this->SendDataToParent(json_encode($data));
         return json_decode($jsonResult, true);
+    }
+
+    // Konfigurationsformular bereitstellen
+    public function GetConfigurationForm()
+    {
+        return file_get_contents(__DIR__ . '/form.json');
     }
 }

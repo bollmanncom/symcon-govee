@@ -1,5 +1,47 @@
 {
-    "elements": [],
-    "actions": [],
-    "status": []
+    "elements": [
+        {
+            "type": "ValidationTextBox",
+            "name": "DeviceID",
+            "caption": "Geräte-ID"
+        },
+        {
+            "type": "ValidationTextBox",
+            "name": "DeviceModel",
+            "caption": "Geräte-Modell"
+        }
+    ],
+    "actions": [
+        {
+            "type": "Label",
+            "caption": "Diese Aktionen sind für die Steuerung des Geräts verfügbar:"
+        },
+        {
+            "type": "Button",
+            "caption": "Gerät einschalten",
+            "onClick": "GOVEE_SwitchDevice($id, true);"
+        },
+        {
+            "type": "Button",
+            "caption": "Gerät ausschalten",
+            "onClick": "GOVEE_SwitchDevice($id, false);"
+        }
+    ],
+    "status": [
+        {
+            "code": 102,
+            "icon": "active",
+            "caption": "Govee Gerät wird erstellt"
+        },
+        {
+            "code": 104,
+            "icon": "inactive",
+            "caption": "Govee Gerät wurde deaktiviert"
+        },
+        {
+            "code": 200,
+            "icon": "inactive",
+            "caption": "Govee Gerät ist inaktiv"
+        }
+    ]
 }
