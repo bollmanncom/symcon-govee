@@ -43,8 +43,8 @@ class GoveeIO extends IPSModule
         $data = json_decode($JSONString, true);
 
         // Prüfen, ob die DataID übereinstimmt
-        if ($data['DataID'] !== '{E2CDD4C0-3E9F-4B4E-9D92-8C1F9B6F8B8B}') {
-            $this->SendDebug('ForwardData', 'Ungültige DataID erhalten', 0);
+        if (!isset($data['DataID']) || $data['DataID'] !== '{E2CDD4C0-3E9F-4B4E-9D92-8C1F9B6F8B8B}') {
+            $this->SendDebug('ReceiveData', 'Ungültige DataID erhalten', 0);
             return json_encode(['success' => false, 'error' => 'Invalid DataID']);
         }
 
@@ -112,7 +112,7 @@ class GoveeIO extends IPSModule
             return ['success' => false, 'error' => $error];
         }
 
-        return ['success' => true];
+        return ['success' => true, 'data' => $dataResponse];
     }
 
     // Konfigurationsformular bereitstellen
