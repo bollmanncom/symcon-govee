@@ -1,5 +1,15 @@
 {
-    "elements": [],
+    "elements": [
+        {
+            "type": "ValidationTextBox",
+            "name": "APIKey",
+            "caption": "API-Schlüssel"
+        },
+        {
+            "type": "Label",
+            "caption": "Bitte geben Sie hier Ihren Govee API-Schlüssel ein."
+        }
+    ],
     "actions": [],
     "status": []
 }

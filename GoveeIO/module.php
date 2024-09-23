@@ -6,6 +6,7 @@ class GoveeIO extends IPSModule
 {
     public function Create()
     {
+        // Diese Zeile nicht löschen
         parent::Create();
 
         // Eigenschaft für den API-Schlüssel registrieren
@@ -14,7 +15,20 @@ class GoveeIO extends IPSModule
 
     public function ApplyChanges()
     {
+        // Diese Zeile nicht löschen
         parent::ApplyChanges();
+
+        // API-Schlüssel aus den Moduleigenschaften lesen
+        $apiKey = $this->ReadPropertyString('APIKey');
+
+        // Überprüfen, ob der API-Schlüssel gesetzt ist
+        if ($apiKey == '') {
+            $this->LogMessage('API-Schlüssel ist nicht gesetzt!', KL_WARNING);
+            return;
+        }
+
+        // Log-Meldung zur Überprüfung
+        $this->LogMessage("GoveeIO: API-Schlüssel gesetzt auf: " . $apiKey, KL_MESSAGE);
     }
 
     // Methode, um den API-Schlüssel für untergeordnete Module bereitzustellen
@@ -41,6 +55,7 @@ class GoveeIO extends IPSModule
         return json_encode($result);
     }
 
+    // Funktion, um eine API-Anfrage zu senden
     private function SendAPIRequest($data)
     {
         // Implementieren Sie hier die Kommunikation mit der Govee API
@@ -99,5 +114,11 @@ class GoveeIO extends IPSModule
         }
 
         return ['success' => true];
+    }
+
+    // Konfigurationsformular bereitstellen
+    public function GetConfigurationForm()
+    {
+        return file_get_contents(__DIR__ . '/form.json');
     }
 }
