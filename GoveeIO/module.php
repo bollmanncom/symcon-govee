@@ -38,7 +38,7 @@ class GoveeIO extends IPSModule
     }
 
     // Methode, um Daten von untergeordneten Modulen zu empfangen
-    public function ForwardData($JSONString)
+    public function ReceiveData($JSONString)
     {
         $data = json_decode($JSONString, true);
 
