@@ -2,12 +2,14 @@
   "id": "{95b17a40-4f2b-4d8a-923d-fe34095773bc}",
   "name": "Govee Control",
   "author": "bollmann.com e.K.",
-  "url": "",
+  "url": "https://github.com/bollmanncom/symcon-govee",
   "version": "1.0",
   "build": 0,
   "compatibility": {
     "version": "6.0"
   },
+  "license": "MIT",
+  "description": "Ein Modul zur Steuerung von Govee-Geräten in IP-Symcon.",
   "modules": [
     {
       "id": "{9f57dc06-0ea2-41ce-9b12-fe766033d55d}",
