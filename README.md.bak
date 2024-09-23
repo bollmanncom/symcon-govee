@@ -21,7 +21,7 @@ Das **Govee Control Modul** ermöglicht die Integration und Steuerung von Govee-
 
 1. Öffnen Sie die **IP-Symcon Management Console**.
 2. Navigieren Sie zu **Kern Instanzen** > **Modules**.
-3. Fügen Sie ein neues Modul hinzu und verwenden Sie folgende URL: https://github.com/bollmanncom/symcon-govee.git
+3. Fügen Sie ein neues Modul hinzu und verwenden Sie folgende URL: https://github.com/bollmann-com/symcon-govee.git
 
 
 4. Klicken Sie auf **OK**, um das Modul zu installieren.
