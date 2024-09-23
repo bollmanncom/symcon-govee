@@ -1,6 +1,6 @@
 {
   "id": "{9F57DC06-0EA2-41CE-9B12-FE766033D55D}",
-  "name": "Govee IO",
+  "name": "GoveeIO",
   "type": 1,
   "vendor": "bollmann.com e.K.",
   "aliases": [
@@ -8,10 +8,10 @@
   ],
   "parentRequirements": [],
   "childRequirements": [
-      "{5A2FDB7C-0D0A-F4CE-2B66-23119E653F4D}"
+      "{018EF6B5-AB94-40C6-AA53-46943E824ACF}"
   ],
   "implemented": [
-      "{A774E62B-D3ED-031F-B5BB-876BC33076F8}"
+      "{79827379-F36E-4ADA-8A95-5F8D1DC92FA9}"
   ],
   "prefix": "GOVEEIO",
   "url": ""
