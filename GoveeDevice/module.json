@@ -1,11 +1,14 @@
 {
-  "id": "{8e4e6f37-5435-431e-b058-01c253c3a021}",
-  "name": "Govee Device",
-  "type": 3,
-  "vendor": "bollmann.com e.K.",
-  "aliases": ["Govee Device"],
-  "parentRequirements": ["{9f57dc06-0ea2-41ce-9b12-fe766033d55d}"],
-  "childRequirements": [],
-  "implemented": [],
-  "prefix": "GOVEE"
+    "id": "{8E4E6F37-5435-431E-B058-01C253C3A021}",
+    "name": "Govee Device",
+    "type": 3,
+    "vendor": "bollmann.com e.K.",
+    "aliases": [
+        "Govee Device"
+    ],
+    "parentRequirements": [],
+    "childRequirements": [],
+    "implemented": [],
+    "prefix": "GOVEE",
+    "url": ""
 }

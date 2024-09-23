@@ -1,37 +1,12 @@
 {
-  "id": "{95b17a40-4f2b-4d8a-923d-fe34095773bc}",
-  "name": "Govee Control",
-  "author": "bollmann.com e.K.",
-  "url": "https://github.com/bollmanncom/symcon-govee",
-  "version": "1.0",
-  "build": 0,
-  "compatibility": {
-    "version": "6.0"
-  },
-  "license": "MIT",
-  "description": "Ein Modul zur Steuerung von Govee-Geräten in IP-Symcon.",
-  "modules": [
-    {
-      "id": "{9f57dc06-0ea2-41ce-9b12-fe766033d55d}",
-      "name": "Govee IO",
-      "type": 1,
-      "vendor": "bollmann.com e.K.",
-      "aliases": ["Govee IO"],
-      "parentRequirements": [],
-      "childRequirements": ["{8e4e6f37-5435-431e-b058-01c253c3a021}"],
-      "implemented": [],
-      "prefix": "GOVEEIO"
+    "id": "{95B17A40-4F2B-4D8A-923D-FE34095773BC}",
+    "name": "Govee Control",
+    "author": "bollmann.com e.K.",
+    "url": "https://github.com/bollmanncom/symcon-govee",
+    "compatibility": {
+        "version": "7.1"
     },
-    {
-      "id": "{8e4e6f37-5435-431e-b058-01c253c3a021}",
-      "name": "Govee Device",
-      "type": 3,
-      "vendor": "bollmann.com e.K.",
-      "aliases": ["Govee Device"],
-      "parentRequirements": ["{9f57dc06-0ea2-41ce-9b12-fe766033d55d}"],
-      "childRequirements": [],
-      "implemented": [],
-      "prefix": "GOVEE"
-    }
-  ]
+    "version": "1.0",
+    "build": 1696324800,
+    "date": 1696324800
 }
