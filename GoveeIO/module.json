@@ -6,12 +6,13 @@
     "aliases": [
         "Govee IO"
     ],
-    "parentRequirements": [],
+    "parentRequirements": [
+    ],
     "childRequirements": [
-        "{8E4E6F37-5435-431E-B058-01C253C3A021}"
+        "{3CFF0FD9-E306-41DB-9B5A-9D06D38576C3}"
     ],
     "implemented": [
-        "{79827379-F36E-4ADA-8A95-5F8D1DC92FA9}"
+        "{3CFF0FD9-E306-41DB-9B5A-9D06D38576C3}"
     ],
     "prefix": "GOVEEIO",
     "url": ""
