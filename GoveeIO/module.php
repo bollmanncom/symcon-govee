@@ -72,8 +72,6 @@ class GoveeIO extends IPSModule
 
         $this->SendDebug('Send Capability', json_encode($capabilities), 0);
 
-        $results = []; // Array zum Speichern der Ergebnisse jedes Requests
-
         // Sicherstellen, dass $capabilities ein Array ist
         if (!is_array($capabilities)) {
             $capabilities = [$capabilities]; // In ein Array "verpacken", falls es keine Liste ist
@@ -114,24 +112,25 @@ class GoveeIO extends IPSModule
             if (curl_errno($ch)) {
                 $error = 'cURL Fehler: ' . curl_error($ch);
                 $this->SendDebug('SendAPIRequest', $error, 0);
-                $results[] = ['success' => false, 'error' => $error];
-            } else {
-                $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-                $dataResponse = json_decode($response, true);
-                if ($httpCode == 200 && isset($dataResponse['status']) && $dataResponse['status'] == 200) {
-                    $results[] = ['success' => true];
-                } else {
-                    $error = isset($dataResponse['message']) ? $dataResponse['message'] : 'Unbekannter Fehler';
-                    $this->SendDebug('SendAPIRequest', 'Fehler beim Senden des Befehls: ' . $error, 0);
-                    $results[] = ['success' => false, 'error' => $error];
-                }
+                curl_close($ch);
+                return ['success' => false, 'error' => $error];
             }
 
+            $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+            $dataResponse = json_decode($response, true);
             curl_close($ch);
+
+            if ($httpCode != 200 || (isset($dataResponse['status']) && $dataResponse['status'] != 200)) {
+                $error = isset($dataResponse['message']) ? $dataResponse['message'] : 'Unbekannter Fehler';
+                $this->SendDebug('SendAPIRequest', 'Fehler beim Senden des Befehls: ' . $error, 0);
+                return ['success' => false, 'error' => $error];
+            }
         }
 
-        return $results;
+        // Wenn alle Anfragen erfolgreich waren
+        return ['success' => true];
     }
+
 
     // Konfigurationsformular bereitstellen
     public function GetConfigurationForm()
