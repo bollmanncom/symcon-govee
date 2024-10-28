@@ -40,23 +40,16 @@ class GoveeIO extends IPSModule
     // Methode, um Daten von untergeordneten Modulen zu empfangen
     public function ForwardData($JSONString)
     {
-        $this->SendDebug('ReceiveData', 'Enter', 0);
-
         // JSON-Daten in ein assoziatives Array dekodieren
         $data = json_decode($JSONString, true);
 
         // Überprüfen, ob die DataID übereinstimmt
         if ($data['DataID'] === '{5ABD644C-3C2F-34C7-9B45-68CED2830B32}') {
-            // Nutzdaten aus dem JSON-Array extrahieren
-            $deviceID = $data['DeviceID'];
-            $deviceModel = $data['DeviceModel'];
-            $capability = $data['Capability'];
-
             // Debugging: Ausgabe der empfangenen Daten
             $this->SendDebug('ReceiveData', 'Empfangene Daten: ' . print_r($data, true), 0);
 
             // Verarbeiten der empfangenen Daten
-            $result = $this->ProcessGoveeCommand($deviceID, $deviceModel, $capability);
+            $result = $this->ProcessGoveeCommand($data);
 
             // Rückgabewert im JSON-Format codieren und zurücksenden
             return json_encode($result);
