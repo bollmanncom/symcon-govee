@@ -62,6 +62,7 @@ class GoveeIO extends IPSModule
         }
     }
 
+
     private function SendAPIRequest($data)
     {
         // Implementieren Sie hier die Kommunikation mit der Govee API
@@ -71,7 +72,7 @@ class GoveeIO extends IPSModule
         $capabilities = $data['Capability'];
 
         // Sicherstellen, dass $capabilities ein Array ist
-        if (!is_array($capabilities)) {
+        if (!isArrayOfAssociativeArrays($capabilities)) {
             $capabilities = [$capabilities]; // In ein Array "verpacken", falls es keine Liste ist
         }
 
@@ -131,7 +132,24 @@ class GoveeIO extends IPSModule
         return ['success' => true];
     }
 
+    private function isArrayOfAssociativeArrays($data)
+    {
+        // Prüfen, ob $data ein Array ist
+        if (!is_array($data)) {
+            return false;
+        }
 
+        // Prüfen, ob jedes Element im Array ein assoziatives Array ist
+        foreach ($data as $item) {
+            if (!is_array($item) || array_keys($item) === range(0, count($item) - 1)) {
+                // Wenn $item kein Array oder ein numerisch indiziertes Array ist, return false
+                return false;
+            }
+        }
+
+        return true; // Es handelt sich um ein Array von assoziativen Arrays
+    }
+    
     // Konfigurationsformular bereitstellen
     public function GetConfigurationForm()
     {
