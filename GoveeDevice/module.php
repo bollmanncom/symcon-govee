@@ -173,17 +173,6 @@ class GoveeDevice extends IPSModule
             'value' => $state ? 1 : 0,
         ];
 
-        // Farbtemperatur hinzufügen (Prüfen auf gültigen Bereich)
-        if ($colorTemperature >= 2700 && $colorTemperature <= 6500) {
-            $capabilities[] = [
-                'type' => 'devices.capabilities.color_setting',
-                'instance' => 'colorTemperatureK',
-                'value' => $colorTemperature,
-            ];
-        } else {
-            $this->SendDebug('SetAllAttributes', 'Fehler: Farbtemperatur außerhalb des gültigen Bereichs (2700K - 6500K).', 0);
-        }
-
         // Helligkeit hinzufügen (Prüfen auf gültigen Bereich)
         if ($brightness >= 1 && $brightness <= 100) {
             $capabilities[] = [
@@ -202,6 +191,17 @@ class GoveeDevice extends IPSModule
             'instance' => 'colorRgb',
             'value' => $colorValue,
         ];
+
+        // Farbtemperatur hinzufügen (Prüfen auf gültigen Bereich)
+        if ($colorTemperature >= 2700 && $colorTemperature <= 6500) {
+            $capabilities[] = [
+                'type' => 'devices.capabilities.color_setting',
+                'instance' => 'colorTemperatureK',
+                'value' => $colorTemperature,
+            ];
+        } else {
+            $this->SendDebug('SetAllAttributes', 'Fehler: Farbtemperatur außerhalb des gültigen Bereichs (2700K - 6500K).', 0);
+        }
 
         // Alle Capabilities in einem einzigen Aufruf an die API senden
         $result = $this->SendGoveeCommand($capabilities);
