@@ -62,9 +62,16 @@ class GoveeIO extends IPSModule
         }
     }
 
-    private function SendAPIRequest(array $capabilities, string $deviceId, string $deviceModel)
+    private function SendAPIRequest($data)
     {
+        // Implementieren Sie hier die Kommunikation mit der Govee API
         $apiKey = $this->ReadPropertyString('APIKey');
+        $deviceId = $data['DeviceID'];
+        $deviceModel = $data['DeviceModel'];
+        $capabilities = $data['Capability'];
+
+        $this->SendDebug('Send Capability', json_encode($capabilities), 0);
+
         $results = []; // Array zum Speichern der Ergebnisse jedes Requests
 
         foreach ($capabilities as $index => $capability) {
@@ -117,7 +124,6 @@ class GoveeIO extends IPSModule
 
         return $results;
     }
-
 
     // Konfigurationsformular bereitstellen
     public function GetConfigurationForm()
