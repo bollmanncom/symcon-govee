@@ -40,6 +40,7 @@ class GoveeConfigurator extends IPSModule
                     'instanceID' => $existingInstanceID,
                     'create' => [
                         'moduleID' => '{8E4E6F37-5435-431E-B058-01C253C3A021}', // GoveeDevice Modul-ID
+                        'name' => $device['deviceName'],
                         'location' => ['Govee', 'Devices'], // Optional: Speicherort der Instanzen
                         'configuration' => [
                             'DeviceID' => $device['device'],
