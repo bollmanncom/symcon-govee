@@ -72,7 +72,7 @@ class GoveeIO extends IPSModule
         $capabilities = $data['Capability'];
 
         // Sicherstellen, dass $capabilities ein Array ist
-        if (!isArrayOfAssociativeArrays($capabilities)) {
+        if (!$this->isArrayOfAssociativeArrays($capabilities)) {
             $capabilities = [$capabilities]; // In ein Array "verpacken", falls es keine Liste ist
         }
 
@@ -149,7 +149,7 @@ class GoveeIO extends IPSModule
 
         return true; // Es handelt sich um ein Array von assoziativen Arrays
     }
-    
+
     // Konfigurationsformular bereitstellen
     public function GetConfigurationForm()
     {
