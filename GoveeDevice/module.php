@@ -41,6 +41,20 @@ class GoveeDevice extends IPSModule
 
         $this->RegisterVariableInteger('ColorTemperature', 'Farbtemperatur', '', 4);
         $this->EnableAction('ColorTemperature');
+
+        // Aktuelle Werte der Variablen abrufen
+        $state = $this->GetValue('Status');
+        $colorTemperature = $this->GetValue('ColorTemperature');
+        $brightness = $this->GetValue('Brightness');
+
+        // Farbvariable abrufen und in RGB-Werte umwandeln
+        $color = $this->GetValue('Color');
+        $red = ($color >> 16) & 0xFF;
+        $green = ($color >> 8) & 0xFF;
+        $blue = $color & 0xFF;
+
+        // SetAllAttributes aufrufen, um die aktuellen Werte an das Gerät zu senden
+        $this->SetAllAttributes($state, $colorTemperature, $brightness, $red, $green, $blue);
     }
 
     public function RequestAction($Ident, $Value)
@@ -214,6 +228,8 @@ class GoveeDevice extends IPSModule
             'DeviceModel' => $this->ReadPropertyString('DeviceModel'),
             'Capability' => $capability,
         ];
+
+        $this->SendDebug('SendGoveeCommand', json_encode($capability), 0);
 
         // Senden der Daten an das übergeordnete Modul
         $jsonResult = $this->SendDataToParent(json_encode($data));
