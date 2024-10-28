@@ -38,6 +38,9 @@ class GoveeDevice extends IPSModule
 
         $this->RegisterVariableInteger('Color', 'Farbe', '~HexColor', 3);
         $this->EnableAction('Color');
+
+        $this->RegisterVariableInteger('ColorTemperature', 'Farbtemperatur', '', 4);
+        $this->EnableAction('ColorTemperature');
     }
 
     public function RequestAction($Ident, $Value)
@@ -55,11 +58,39 @@ class GoveeDevice extends IPSModule
                 $this->SetColor($Value);
                 break;
 
+            case 'ColorTemperature':
+                $this->SetColorTemperature($Value);
+                break;
+
             default:
                 throw new Exception('Invalid Ident');
         }
     }
 
+    private function SetColorTemperature(int $colorTemperature)
+    {
+        // Überprüfen, ob der Farbtemperaturwert im gültigen Bereich liegt (2700K - 6500K)
+        if ($colorTemperature < 2700 || $colorTemperature > 6500) {
+            $this->SendDebug('SetColorTemperature', 'Fehler: Farbtemperatur außerhalb des gültigen Bereichs (2700K - 6500K).', 0);
+            return ['success' => false, 'error' => 'Farbtemperatur muss zwischen 2700 und 6500 Kelvin liegen'];
+        }
+    
+        $capability = [
+            'type' => 'devices.capabilities.color_setting',
+            'instance' => 'colorTemperatureK',
+            'value' => $colorTemperature,
+        ];
+    
+        $result = $this->SendGoveeCommand($capability);
+    
+        if ($result['success']) {
+            $this->SetValue('ColorTemperature', $colorTemperature);
+        } else {
+            $this->SendDebug('SetColorTemperature', 'Fehler: ' . $result['error'], 0);
+        }
+    }
+    
+    
     public function SwitchDevice(bool $State)
     {
         $capability = [
