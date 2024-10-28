@@ -70,8 +70,6 @@ class GoveeIO extends IPSModule
         $deviceModel = $data['DeviceModel'];
         $capabilities = $data['Capability'];
 
-        $this->SendDebug('Send Capability', json_encode($capabilities), 0);
-
         // Sicherstellen, dass $capabilities ein Array ist
         if (!is_array($capabilities)) {
             $capabilities = [$capabilities]; // In ein Array "verpacken", falls es keine Liste ist
@@ -93,6 +91,8 @@ class GoveeIO extends IPSModule
                 ],
             ];
 
+            $this->SendDebug('Request body', json_encode($requestBody), 0);
+        
             // JSON kodieren
             $jsonBody = json_encode($requestBody);
 
