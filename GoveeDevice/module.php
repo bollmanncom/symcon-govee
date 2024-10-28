@@ -126,7 +126,7 @@ class GoveeDevice extends IPSModule
 
         $jsonResult = $this->SendDataToParent(json_encode([
             'DataID' => '{E2CDD4C0-3E9F-4B4E-9D92-8C1F9B6F8B8B}', // Die DataID muss zur ReceiveData-Methode passen
-            'Buffer' => json_encode($data), // Nutzdaten in den Buffer legen
+            'Buffer' => "Test", //json_encode($data), // Nutzdaten in den Buffer legen
         ]));
 
         // Fehlerüberprüfung und Ausgabe für Debugging
