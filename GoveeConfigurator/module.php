@@ -28,13 +28,15 @@ class GoveeConfigurator extends IPSModule
         if ($devices) {
             $deviceList = [];
             foreach ($devices as $device) {
+                $existingInstanceID = $this->GetInstanceIDByDeviceID($device['device']);
+
                 $deviceList[] = [
                     'DeviceName' => $device['deviceName'],
                     'DeviceID' => $device['device'],
                     'Model' => $device['sku'],
-                    'instanceID' => $this->GetInstanceIDByDeviceID($device['device']),
-                    'Create' => [
-                        'moduleID' => '{8E4E6F37-5435-431E-B058-01C253C3A021}', // GoveeDevice Modul-ID
+                    'instanceID' => $existingInstanceID,
+                    'create' => [
+                        'moduleID' => '{8E4E6F37-5435-431E-B058-01C253C3A021}', // Modul-ID für GoveeDevice
                         'configuration' => [
                             'DeviceID' => $device['device'],
                             'DeviceModel' => $device['sku']
@@ -48,6 +50,8 @@ class GoveeConfigurator extends IPSModule
                 'name' => 'DeviceList',
                 'caption' => 'Gefundene Geräte',
                 'rowCount' => 5,
+                'add' => false,
+                'delete' => false,
                 'columns' => [
                     ['caption' => 'Name', 'name' => 'DeviceName', 'width' => '200px'],
                     ['caption' => 'ID', 'name' => 'DeviceID', 'width' => '200px'],
@@ -58,8 +62,7 @@ class GoveeConfigurator extends IPSModule
                         'width' => '100px',
                         'add' => false,
                         'visible' => true
-                    ],
-                    ['caption' => 'Erzeugen', 'name' => 'Create', 'width' => '100px', 'add' => true]
+                    ]
                 ],
                 'values' => $deviceList
             ];
@@ -67,6 +70,17 @@ class GoveeConfigurator extends IPSModule
 
         return json_encode($form);
     }
+
+    private function GetInstanceIDByDeviceID($deviceID)
+    {
+        foreach (IPS_GetInstanceListByModuleID('{8E4E6F37-5435-431E-B058-01C253C3A021}') as $id) {
+            if (IPS_GetProperty($id, 'DeviceID') == $deviceID) {
+                return $id;
+            }
+        }
+        return 0;
+    }
+
 
     private function GetInstanceIDByDeviceID($deviceID)
     {
