@@ -68,6 +68,8 @@ class GoveeIO extends IPSModule
         $deviceModel = $data['DeviceModel'];
         $capability = $data['Capability'];
 
+        $this->SendDebug('Send Capability', $capability, 0);
+
         // Generieren einer eindeutigen requestId
         $requestId = uniqid();
 
