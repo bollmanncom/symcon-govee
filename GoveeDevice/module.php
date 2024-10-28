@@ -165,8 +165,10 @@ class GoveeDevice extends IPSModule
         }
     }
 
-    public function SetAllAttributesWithColor(bool $state, int $brightness, int $red, int $green, int $blue)
+    public function SetAllAttributesWithColor(int $brightness, int $red, int $green, int $blue)
     {
+        $state = true;
+
         // Array zum Sammeln aller Capabilities
         $capabilities = [];
 
@@ -211,8 +213,10 @@ class GoveeDevice extends IPSModule
         }
     }
 
-    public function SetAllAttributesWithTemperature(bool $state, int $brightness, int $colorTemperature)
+    public function SetAllAttributesWithTemperature(int $brightness, int $colorTemperature)
     {
+        $state = true;
+        
         // Array zum Sammeln aller Capabilities
         $capabilities = [];
 
