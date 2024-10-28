@@ -42,18 +42,28 @@ class GoveeIO extends IPSModule
     {
         $data = json_decode($JSONString, true);
 
-        // Prüfen, ob die DataID übereinstimmt
-        if (!isset($data['DataID']) || $data['DataID'] !== '{E2CDD4C0-3E9F-4B4E-9D92-8C1F9B6F8B8B}') {
-            $this->SendDebug('ReceiveData', 'Ungültige DataID erhalten', 0);
-            return json_encode(['success' => false, 'error' => 'Invalid DataID']);
+        // Überprüfen, ob der Buffer vorhanden ist und Daten enthält
+        if (!isset($data['Buffer'])) {
+            $this->SendDebug('ReceiveData', 'Fehler: Kein Buffer vorhanden', 0);
+            return;
         }
 
-        // API-Aufruf hier implementieren
-        $result = $this->SendAPIRequest($data);
+        // Buffer-Daten dekodieren und auslesen
+        $payload = json_decode($data['Buffer'], true);
 
-        // Ergebnis zurückgeben
-        return json_encode($result);
+        if ($payload === null) {
+            $this->SendDebug('ReceiveData', 'Fehler beim Dekodieren des Buffers', 0);
+            return;
+        }
+
+        // Debugging: Ausgabe der Nutzdaten im Payload
+        $this->SendDebug('ReceiveData', 'Empfangene Nutzdaten: ' . print_r($payload, true), 0);
+
+        // Verarbeiten der empfangenen Nutzdaten, z.B. API-Aufruf
+        // ...
     }
+
+
 
     private function SendAPIRequest($data)
     {

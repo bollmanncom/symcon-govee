@@ -119,14 +119,15 @@ class GoveeDevice extends IPSModule
     private function SendGoveeCommand($capability)
     {
         $data = [
-            'DataID' => '{E2CDD4C0-3E9F-4B4E-9D92-8C1F9B6F8B8B}', // Muss zur ReceiveData in GoveeIO passen
             'DeviceID' => $this->ReadPropertyString('DeviceID'),
             'DeviceModel' => $this->ReadPropertyString('DeviceModel'),
             'Capability' => $capability,
         ];
 
-        // Senden der Daten an das übergeordnete Modul
-        $jsonResult = $this->SendDataToParent(json_encode($data));
+        $jsonResult = $this->SendDataToParent(json_encode([
+            'DataID' => '{E2CDD4C0-3E9F-4B4E-9D92-8C1F9B6F8B8B}', // Die DataID muss zur ReceiveData-Methode passen
+            'Buffer' => json_encode($data), // Nutzdaten in den Buffer legen
+        ]));
 
         // Fehlerüberprüfung und Ausgabe für Debugging
         if ($jsonResult === false) {
@@ -134,18 +135,9 @@ class GoveeDevice extends IPSModule
             return ['success' => false, 'error' => 'Kommunikation mit übergeordnetem Objekt fehlgeschlagen'];
         }
 
-        // Ergebnis dekodieren
-        $decodedResult = json_decode($jsonResult, true);
-        
-        // Überprüfen, ob die Dekodierung erfolgreich war
-        if (json_last_error() !== JSON_ERROR_NONE) {
-            $this->SendDebug('SendGoveeCommand', 'Fehler: JSON-Dekodierungsfehler: ' . json_last_error_msg(), 0);
-            return ['success' => false, 'error' => 'JSON-Dekodierungsfehler: ' . json_last_error_msg()];
-        }
-
-        // Rückgabe des dekodierten Ergebnisses
-        return $decodedResult;
+        return json_decode($jsonResult, true);
     }
+
 
     // Konfigurationsformular bereitstellen
     public function GetConfigurationForm()
