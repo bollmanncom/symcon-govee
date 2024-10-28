@@ -10,7 +10,7 @@ class GoveeDevice extends IPSModule
 
         // Verbindung zum übergeordneten Modul herstellen
         $this->ConnectParent('{9F57DC06-0EA2-41CE-9B12-FE766033D55D}'); // Govee IO UUID
-
+        
         // Eigenschaften registrieren
         $this->RegisterPropertyString('DeviceID', '');
         $this->RegisterPropertyString('DeviceModel', '');
