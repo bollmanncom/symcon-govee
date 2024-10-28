@@ -60,7 +60,7 @@ class GoveeDevice extends IPSModule
         }
     }
 
-    private function SwitchDevice(bool $State)
+    public function SwitchDevice(bool $State)
     {
         $capability = [
             'type' => 'devices.capabilities.on_off',
