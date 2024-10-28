@@ -79,8 +79,11 @@ class GoveeIO extends IPSModule
             $capabilities = [$capabilities]; // In ein Array "verpacken", falls es keine Liste ist
         }
 
-        foreach ($capabilities as $index => $capability) {
-            $requestId = (string) ($index + 1); // Hochzählende requestId pro Eintrag
+        $reqId = 0;
+
+        foreach ($capabilities as $capability) {
+            $reqId++;
+            $requestId = (string) ($reqId); // Hochzählende requestId pro Eintrag
 
             // Aufbau des Anfragekörpers für diese Capability
             $requestBody = [
