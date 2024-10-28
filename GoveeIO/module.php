@@ -49,7 +49,7 @@ class GoveeIO extends IPSModule
             $this->SendDebug('ReceiveData', 'Empfangene Daten: ' . print_r($data, true), 0);
 
             // Verarbeiten der empfangenen Daten
-            $result = $this->ProcessGoveeCommand($data);
+            $result = $this->SendAPIRequest($data);
 
             // Rückgabewert im JSON-Format codieren und zurücksenden
             return json_encode($result);
