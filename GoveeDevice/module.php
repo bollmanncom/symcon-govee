@@ -119,15 +119,13 @@ class GoveeDevice extends IPSModule
     private function SendGoveeCommand($capability)
     {
         $data = [
+            'DataID' => '{5ABD644C-3C2F-34C7-9B45-68CED2830B32}',
             'DeviceID' => $this->ReadPropertyString('DeviceID'),
             'DeviceModel' => $this->ReadPropertyString('DeviceModel'),
             'Capability' => $capability,
         ];
 
-        $jsonResult = $this->SendDataToParent(json_encode([
-            'DataID' => '{E2CDD4C0-3E9F-4B4E-9D92-8C1F9B6F8B8B}', // Die DataID muss zur ReceiveData-Methode passen
-            'Buffer' => "Test", //json_encode($data), // Nutzdaten in den Buffer legen
-        ]));
+        $jsonResult = $this->SendDataToParent(json_encode($data));
 
         // Fehlerüberprüfung und Ausgabe für Debugging
         if ($jsonResult === false) {

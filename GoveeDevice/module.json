@@ -7,11 +7,11 @@
         "Govee Device"
     ],
     "parentRequirements": [
-        "{3CFF0FD9-E306-41DB-9B5A-9D06D38576C3}"
+        "{5ABD644C-3C2F-34C7-9B45-68CED2830B32}"
     ],
     "childRequirements": [],
     "implemented": [
-        "{3CFF0FD9-E306-41DB-9B5A-9D06D38576C3}"
+        "{27545592-E632-C420-3132-57BED296EAAE}"
     ],
     "prefix": "GOVEE",
     "url": ""

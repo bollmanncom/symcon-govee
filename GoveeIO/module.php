@@ -40,30 +40,30 @@ class GoveeIO extends IPSModule
     // Methode, um Daten von untergeordneten Modulen zu empfangen
     public function ReceiveData($JSONString)
     {
+        // JSON-Daten in ein assoziatives Array dekodieren
         $data = json_decode($JSONString, true);
 
-        // Überprüfen, ob der Buffer vorhanden ist und Daten enthält
-        if (!isset($data['Buffer'])) {
-            $this->SendDebug('ReceiveData', 'Fehler: Kein Buffer vorhanden', 0);
-            return;
+        // Überprüfen, ob die DataID übereinstimmt
+        if ($data['DataID'] === '{5ABD644C-3C2F-34C7-9B45-68CED2830B32}') {
+            // Nutzdaten aus dem JSON-Array extrahieren
+            $deviceID = $data['DeviceID'];
+            $deviceModel = $data['DeviceModel'];
+            $capability = $data['Capability'];
+
+            // Debugging: Ausgabe der empfangenen Daten
+            $this->SendDebug('ReceiveData', 'Empfangene Daten: ' . print_r($data, true), 0);
+
+            // Verarbeiten der empfangenen Daten
+            $result = $this->ProcessGoveeCommand($deviceID, $deviceModel, $capability);
+
+            // Rückgabewert im JSON-Format codieren und zurücksenden
+            return json_encode($result);
+        } else {
+            // Debugging: Fehlermeldung bei falscher DataID
+            $this->SendDebug('ReceiveData', 'Fehler: Ungültige DataID empfangen', 0);
+            return json_encode(['success' => false, 'error' => 'Ungültige DataID empfangen']);
         }
-
-        // Buffer-Daten dekodieren und auslesen
-        $payload = json_decode($data['Buffer'], true);
-
-        if ($payload === null) {
-            $this->SendDebug('ReceiveData', 'Fehler beim Dekodieren des Buffers', 0);
-            return;
-        }
-
-        // Debugging: Ausgabe der Nutzdaten im Payload
-        $this->SendDebug('ReceiveData', 'Empfangene Nutzdaten: ' . print_r($payload, true), 0);
-
-        // Verarbeiten der empfangenen Nutzdaten, z.B. API-Aufruf
-        // ...
     }
-
-
 
     private function SendAPIRequest($data)
     {
