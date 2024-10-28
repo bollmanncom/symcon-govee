@@ -125,17 +125,24 @@ class GoveeDevice extends IPSModule
             'Capability' => $capability,
         ];
 
+        // Senden der Daten an das übergeordnete Modul
         $jsonResult = $this->SendDataToParent(json_encode($data));
 
-        // Fehlerüberprüfung und Ausgabe für Debugging
+        // Prüfen, ob die Antwort leer oder fehlerhaft ist
         if ($jsonResult === false) {
             $this->SendDebug('SendGoveeCommand', 'Fehler: Kommunikation mit übergeordnetem Objekt fehlgeschlagen. Überprüfen Sie die DataID und das übergeordnete Objekt.', 0);
             return ['success' => false, 'error' => 'Kommunikation mit übergeordnetem Objekt fehlgeschlagen'];
         }
 
-        return json_decode($jsonResult, true);
-    }
+        // Antwort dekodieren und Fehler prüfen
+        $decodedResult = json_decode($jsonResult, true);
+        if ($decodedResult === null) {
+            $this->SendDebug('SendGoveeCommand', 'Fehler: JSON-Dekodierung fehlgeschlagen. Empfangenes Ergebnis: ' . $jsonResult, 0);
+            return ['success' => false, 'error' => 'JSON-Dekodierung fehlgeschlagen'];
+        }
 
+        return $decodedResult;
+    }
 
     // Konfigurationsformular bereitstellen
     public function GetConfigurationForm()
