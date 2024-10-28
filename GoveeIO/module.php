@@ -62,67 +62,62 @@ class GoveeIO extends IPSModule
         }
     }
 
-    private function SendAPIRequest($data)
+    private function SendAPIRequest(array $capabilities, string $deviceId, string $deviceModel)
     {
-        // Implementieren Sie hier die Kommunikation mit der Govee API
         $apiKey = $this->ReadPropertyString('APIKey');
-        $deviceId = $data['DeviceID'];
-        $deviceModel = $data['DeviceModel'];
-        $capability = $data['Capability'];
+        $results = []; // Array zum Speichern der Ergebnisse jedes Requests
 
-        $this->SendDebug('Send Capability', json_encode($capability), 0);
+        foreach ($capabilities as $index => $capability) {
+            $requestId = (string) ($index + 1); // Hochzählende requestId pro Eintrag
 
-        // Generieren einer eindeutigen requestId
-        $requestId = uniqid();
+            // Aufbau des Anfragekörpers für diese Capability
+            $requestBody = [
+                'requestId' => $requestId,
+                'payload' => [
+                    'device' => $deviceId,
+                    'sku' => $deviceModel,
+                    'capability' => $capability,
+                ],
+            ];
 
-        // Aufbau des Anfragekörpers
-        $requestBody = [
-            'requestId' => $requestId,
-            'payload' => [
-                'device' => $deviceId,
-                'sku' => $deviceModel,
-                'capability' => $capability,
-            ],
-        ];
+            // JSON kodieren
+            $jsonBody = json_encode($requestBody);
 
-        // JSON kodieren
-        $jsonBody = json_encode($requestBody);
+            // cURL-Anfrage vorbereiten
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_URL, 'https://openapi.api.govee.com/router/api/v1/device/control');
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_POST, true);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $jsonBody);
+            curl_setopt($ch, CURLOPT_HTTPHEADER, [
+                'Govee-API-Key: ' . $apiKey,
+                'Content-Type: application/json',
+            ]);
 
-        // cURL-Anfrage vorbereiten
-        $ch = curl_init();
+            // Anfrage ausführen und Antwort verarbeiten
+            $response = curl_exec($ch);
+            if (curl_errno($ch)) {
+                $error = 'cURL Fehler: ' . curl_error($ch);
+                $this->SendDebug('SendAPIRequest', $error, 0);
+                $results[] = ['success' => false, 'error' => $error];
+            } else {
+                $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+                $dataResponse = json_decode($response, true);
+                if ($httpCode == 200 && isset($dataResponse['status']) && $dataResponse['status'] == 200) {
+                    $results[] = ['success' => true];
+                } else {
+                    $error = isset($dataResponse['message']) ? $dataResponse['message'] : 'Unbekannter Fehler';
+                    $this->SendDebug('SendAPIRequest', 'Fehler beim Senden des Befehls: ' . $error, 0);
+                    $results[] = ['success' => false, 'error' => $error];
+                }
+            }
 
-        curl_setopt($ch, CURLOPT_URL, 'https://openapi.api.govee.com/router/api/v1/device/control');
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_POST, true);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $jsonBody);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, [
-            'Govee-API-Key: ' . $apiKey,
-            'Content-Type: application/json',
-        ]);
-
-        // Anfrage ausführen
-        $response = curl_exec($ch);
-
-        if (curl_errno($ch)) {
-            $error = 'cURL Fehler: ' . curl_error($ch);
-            $this->SendDebug('SendAPIRequest', $error, 0);
             curl_close($ch);
-            return ['success' => false, 'error' => $error];
         }
 
-        $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-        curl_close($ch);
-
-        $dataResponse = json_decode($response, true);
-
-        if ($httpCode != 200 || (isset($dataResponse['status']) && $dataResponse['status'] != 200)) {
-            $error = isset($dataResponse['message']) ? $dataResponse['message'] : 'Unbekannter Fehler';
-            $this->SendDebug('SendAPIRequest', 'Fehler beim Senden des Befehls: ' . $error, 0);
-            return ['success' => false, 'error' => $error];
-        }
-
-        return ['success' => true, 'data' => $dataResponse];
+        return $results;
     }
+
 
     // Konfigurationsformular bereitstellen
     public function GetConfigurationForm()
