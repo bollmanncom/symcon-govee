@@ -10,7 +10,7 @@ class GoveeDevice extends IPSModule
 
         // Verbindung zum übergeordneten Modul herstellen
         $this->ConnectParent('{9F57DC06-0EA2-41CE-9B12-FE766033D55D}'); // Govee IO UUID
-        
+
         // Eigenschaften registrieren
         $this->RegisterPropertyString('DeviceID', '');
         $this->RegisterPropertyString('DeviceModel', '');
@@ -67,30 +67,30 @@ class GoveeDevice extends IPSModule
         }
     }
 
-    private function SetColorTemperature(int $colorTemperature)
+    public function SetColorTemperature(int $colorTemperature)
     {
         // Überprüfen, ob der Farbtemperaturwert im gültigen Bereich liegt (2700K - 6500K)
         if ($colorTemperature < 2700 || $colorTemperature > 6500) {
             $this->SendDebug('SetColorTemperature', 'Fehler: Farbtemperatur außerhalb des gültigen Bereichs (2700K - 6500K).', 0);
             return ['success' => false, 'error' => 'Farbtemperatur muss zwischen 2700 und 6500 Kelvin liegen'];
         }
-    
+
         $capability = [
             'type' => 'devices.capabilities.color_setting',
             'instance' => 'colorTemperatureK',
             'value' => $colorTemperature,
         ];
-    
+
         $result = $this->SendGoveeCommand($capability);
-    
+
         if ($result['success']) {
             $this->SetValue('ColorTemperature', $colorTemperature);
         } else {
             $this->SendDebug('SetColorTemperature', 'Fehler: ' . $result['error'], 0);
         }
     }
-    
-    
+
+
     public function SwitchDevice(bool $State)
     {
         $capability = [
@@ -108,7 +108,7 @@ class GoveeDevice extends IPSModule
         }
     }
 
-    private function SetBrightness(int $Brightness)
+    public function SetBrightness(int $Brightness)
     {
         $capability = [
             'type' => 'devices.capabilities.range',
@@ -125,7 +125,7 @@ class GoveeDevice extends IPSModule
         }
     }
 
-    private function SetColor(int $Color)
+    public function SetColor(int $Color)
     {
         $r = ($Color >> 16) & 0xFF;
         $g = ($Color >> 8) & 0xFF;
@@ -146,6 +146,65 @@ class GoveeDevice extends IPSModule
             $this->SendDebug('SetColor', 'Fehler: ' . $result['error'], 0);
         }
     }
+
+    public function SetAllAttributes(bool $state, int $colorTemperature, int $brightness, int $red, int $green, int $blue)
+    {
+        // Array zum Sammeln aller Capabilities
+        $capabilities = [];
+
+        // Ein-/Ausschalten hinzufügen
+        $capabilities[] = [
+            'type' => 'devices.capabilities.on_off',
+            'instance' => 'powerSwitch',
+            'value' => $state ? 1 : 0,
+        ];
+
+        // Farbtemperatur hinzufügen (Prüfen auf gültigen Bereich)
+        if ($colorTemperature >= 2700 && $colorTemperature <= 6500) {
+            $capabilities[] = [
+                'type' => 'devices.capabilities.color_setting',
+                'instance' => 'colorTemperatureK',
+                'value' => $colorTemperature,
+            ];
+        } else {
+            $this->SendDebug('SetAllAttributes', 'Fehler: Farbtemperatur außerhalb des gültigen Bereichs (2700K - 6500K).', 0);
+        }
+
+        // Helligkeit hinzufügen (Prüfen auf gültigen Bereich)
+        if ($brightness >= 1 && $brightness <= 100) {
+            $capabilities[] = [
+                'type' => 'devices.capabilities.range',
+                'instance' => 'brightness',
+                'value' => $brightness,
+            ];
+        } else {
+            $this->SendDebug('SetAllAttributes', 'Fehler: Helligkeit außerhalb des gültigen Bereichs (1 - 100).', 0);
+        }
+
+        // RGB-Farbwerte umwandeln und hinzufügen
+        $colorValue = (($red & 0xFF) << 16) | (($green & 0xFF) << 8) | ($blue & 0xFF);
+        $capabilities[] = [
+            'type' => 'devices.capabilities.color_setting',
+            'instance' => 'colorRgb',
+            'value' => $colorValue,
+        ];
+
+        // Alle Capabilities in einem einzigen Aufruf an die API senden
+        $result = $this->SendGoveeCommand($capabilities);
+
+        if ($result['success']) {
+            // Wenn erfolgreich, Werte in den Statusvariablen aktualisieren
+            $this->SetValue('Status', $state);
+            $this->SetValue('ColorTemperature', $colorTemperature);
+            $this->SetValue('Brightness', $brightness);
+
+            // RGB-Farbe als Integer für die Color-Variable speichern
+            $this->SetValue('Color', $colorValue);
+        } else {
+            $this->SendDebug('SetAllAttributes', 'Fehler: ' . $result['error'], 0);
+        }
+    }
+
 
     private function SendGoveeCommand($capability)
     {
