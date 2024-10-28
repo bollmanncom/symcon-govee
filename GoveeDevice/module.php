@@ -229,7 +229,7 @@ class GoveeDevice extends IPSModule
             'Capability' => $capability,
         ];
 
-        $this->SendDebug('SendGoveeCommand', json_encode($capability), 0);
+        $this->SendDebug('SendGoveeCommand', json_encode($data), 0);
 
         // Senden der Daten an das übergeordnete Modul
         $jsonResult = $this->SendDataToParent(json_encode($data));

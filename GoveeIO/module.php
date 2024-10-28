@@ -40,6 +40,8 @@ class GoveeIO extends IPSModule
     // Methode, um Daten von untergeordneten Modulen zu empfangen
     public function ForwardData($JSONString)
     {
+        $this->SendDebug('Govee IO', $JSONString, 0);
+
         // JSON-Daten in ein assoziatives Array dekodieren
         $data = json_decode($JSONString, true);
 
