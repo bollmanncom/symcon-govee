@@ -74,6 +74,11 @@ class GoveeIO extends IPSModule
 
         $results = []; // Array zum Speichern der Ergebnisse jedes Requests
 
+        // Sicherstellen, dass $capabilities ein Array ist
+        if (!is_array($capabilities)) {
+            $capabilities = [$capabilities]; // In ein Array "verpacken", falls es keine Liste ist
+        }
+
         foreach ($capabilities as $index => $capability) {
             $requestId = (string) ($index + 1); // Hochzählende requestId pro Eintrag
 
