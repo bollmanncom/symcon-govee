@@ -1,0 +1,18 @@
+{
+    "id": "{3A3B81F0-5C21-47C6-AC87-937E2C0F4A69}",
+    "name": "Govee Configurator",
+    "type": 4,
+    "vendor": "bollmann.com e.K.",
+    "aliases": [
+        "Govee Configurator"
+    ],
+    "parentRequirements": [
+        "{E2CDD4C0-3E9F-4B4E-9D92-8C1F9B6F8B8B}"
+    ],
+    "childRequirements": [],
+    "implemented": [
+        "{27545592-E632-C420-3132-57BED296EAAE}"
+    ],
+    "prefix": "GOVEE",
+    "url": ""
+}

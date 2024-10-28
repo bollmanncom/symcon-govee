@@ -55,6 +55,13 @@ class GoveeIO extends IPSModule
 
             // Rückgabewert im JSON-Format codieren und zurücksenden
             return json_encode($result);
+        } 
+        else if ($data['DataID'] === '{E2CDD4C0-3E9F-4B4E-9D92-8C1F9B6F8B8B}') {
+            // FetchDevices wird aufgerufen, um die Geräteliste abzurufen
+            $devices = $this->FetchDevices();
+    
+            // Die Geräte als JSON-codierte Antwort zurückgeben
+            return json_encode($devices);
         } else {
             // Debugging: Fehlermeldung bei falscher DataID
             $this->SendDebug('ReceiveData', 'Fehler: Ungültige DataID empfangen', 0);
@@ -149,6 +156,56 @@ class GoveeIO extends IPSModule
 
         return true; // Es handelt sich um ein Array von assoziativen Arrays
     }
+
+    public function FetchDevices()
+    {
+        $apiKey = $this->ReadPropertyString('APIKey');
+    
+        if (empty($apiKey)) {
+            $this->SendDebug('FetchDevices', 'API-Key ist nicht gesetzt', 0);
+            return [];
+        }
+    
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, 'https://openapi.api.govee.com/router/api/v1/user/devices');
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, [
+            'Govee-API-Key: ' . $apiKey,
+            'Content-Type: application/json',
+        ]);
+    
+        $response = curl_exec($ch);
+    
+        if (curl_errno($ch)) {
+            $error = 'cURL Fehler: ' . curl_error($ch);
+            $this->SendDebug('FetchDevices', $error, 0);
+            curl_close($ch);
+            return [];
+        }
+    
+        $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        curl_close($ch);
+    
+        if ($httpCode != 200) {
+            $this->SendDebug('FetchDevices', 'HTTP-Fehlercode: ' . $httpCode, 0);
+            return [];
+        }
+    
+        $data = json_decode($response, true);
+    
+        if (json_last_error() !== JSON_ERROR_NONE) {
+            $this->SendDebug('FetchDevices', 'JSON-Dekodierungsfehler: ' . json_last_error_msg(), 0);
+            return [];
+        }
+    
+        if (isset($data['data']) && is_array($data['data'])) {
+            return $data['data'];
+        } else {
+            $this->SendDebug('FetchDevices', 'Keine Geräte gefunden oder ungültiges Format', 0);
+            return [];
+        }
+    }
+   
 
     // Konfigurationsformular bereitstellen
     public function GetConfigurationForm()
