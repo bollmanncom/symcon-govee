@@ -32,6 +32,7 @@ class GoveeConfigurator extends IPSModule
                 // Prüfen, ob das Gerät bereits als Instanz existiert
                 $existingInstanceID = $this->GetInstanceIDByDeviceID($device['device']);
 
+                // Wenn die Instanz existiert, zeige die ID, andernfalls füge den Erzeugen-Button hinzu
                 $deviceList[] = [
                     'DeviceName' => $device['deviceName'],
                     'DeviceID' => $device['device'],
@@ -39,6 +40,7 @@ class GoveeConfigurator extends IPSModule
                     'instanceID' => $existingInstanceID,
                     'create' => [
                         'moduleID' => '{8E4E6F37-5435-431E-B058-01C253C3A021}', // GoveeDevice Modul-ID
+                        'location' => ['Govee', 'Devices'], // Optional: Speicherort der Instanzen
                         'configuration' => [
                             'DeviceID' => $device['device'],
                             'DeviceModel' => $device['sku']
@@ -49,12 +51,10 @@ class GoveeConfigurator extends IPSModule
 
             // Liste mit Geräten und dem Erzeugen-Button
             $form['actions'][] = [
-                'type' => 'List',
+                'type' => 'Configurator', // Verwenden des Configurator-Typs
                 'name' => 'DeviceList',
                 'caption' => 'Gefundene Geräte',
                 'rowCount' => 5,
-                'add' => false,
-                'delete' => false,
                 'columns' => [
                     ['caption' => 'Name', 'name' => 'DeviceName', 'width' => '200px'],
                     ['caption' => 'ID', 'name' => 'DeviceID', 'width' => '200px'],
@@ -65,8 +65,7 @@ class GoveeConfigurator extends IPSModule
                         'width' => '100px',
                         'add' => false,
                         'visible' => true
-                    ],
-                    ['caption' => 'Erzeugen', 'name' => 'create', 'width' => '100px', 'add' => true]
+                    ]
                 ],
                 'values' => $deviceList
             ];
