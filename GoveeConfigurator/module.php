@@ -32,6 +32,7 @@ class GoveeConfigurator extends IPSModule
                     'DeviceName' => $device['deviceName'],
                     'DeviceID' => $device['device'],
                     'Model' => $device['sku'],
+                    'instanceID' => $this->GetInstanceIDByDeviceID($device['device']),
                     'Create' => [
                         'moduleID' => '{8E4E6F37-5435-431E-B058-01C253C3A021}', // GoveeDevice Modul-ID
                         'configuration' => [
@@ -51,6 +52,13 @@ class GoveeConfigurator extends IPSModule
                     ['caption' => 'Name', 'name' => 'DeviceName', 'width' => '200px'],
                     ['caption' => 'ID', 'name' => 'DeviceID', 'width' => '200px'],
                     ['caption' => 'Modell', 'name' => 'Model', 'width' => '200px'],
+                    [
+                        'caption' => 'Instanz ID',
+                        'name' => 'instanceID',
+                        'width' => '100px',
+                        'add' => false,
+                        'visible' => true
+                    ],
                     ['caption' => 'Erzeugen', 'name' => 'Create', 'width' => '100px', 'add' => true]
                 ],
                 'values' => $deviceList
@@ -59,6 +67,17 @@ class GoveeConfigurator extends IPSModule
 
         return json_encode($form);
     }
+
+    private function GetInstanceIDByDeviceID($deviceID)
+    {
+        foreach (IPS_GetInstanceListByModuleID('{8E4E6F37-5435-431E-B058-01C253C3A021}') as $id) {
+            if (IPS_GetProperty($id, 'DeviceID') == $deviceID) {
+                return $id;
+            }
+        }
+        return 0;
+    }
+
 
     private function FetchDevicesFromParent()
     {
