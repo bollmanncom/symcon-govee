@@ -55,9 +55,9 @@ class GoveeDevice extends IPSModule
 
         // Entscheiden, ob Farbtemperatur oder Farbe gesetzt werden soll
         if ($red == 255 && $green == 255 && $blue == 255) {
-            $this->SetAllAttributesWithTemperature($state, $colorTemperature, $brightness);
+            $this->SetAllAttributesWithTemperature($colorTemperature, $brightness);
         } else {
-            $this->SetAllAttributesWithColor($state, $brightness, $red, $green, $blue);
+            $this->SetAllAttributesWithColor($brightness, $red, $green, $blue);
         }
     }
 
@@ -216,7 +216,7 @@ class GoveeDevice extends IPSModule
     public function SetAllAttributesWithTemperature(int $brightness, int $colorTemperature)
     {
         $state = true;
-        
+
         // Array zum Sammeln aller Capabilities
         $capabilities = [];
 
