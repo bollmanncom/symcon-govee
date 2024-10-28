@@ -29,37 +29,62 @@ class GoveeDevice extends IPSModule
             return;
         }
 
-        // Variablen registrieren
-        $this->RegisterVariableBoolean('Status', 'Status', '~Switch', 1);
-        $this->EnableAction('Status');
+        // Überprüfen, ob die Variablen existieren, und falls nicht, Standardwerte setzen
+        $isNewInstance = false;
 
-        $this->RegisterVariableInteger('Brightness', 'Helligkeit', '~Intensity.100', 2);
-        $this->EnableAction('Brightness');
+        if (!@$this->GetIDForIdent('Status')) {
+            $this->RegisterVariableBoolean('Status', 'Status', '~Switch', 1);
+            $this->EnableAction('Status');
+            $this->SetValue('Status', true); // Standard: eingeschaltet
+            $isNewInstance = true;
+        }
 
-        $this->RegisterVariableInteger('Color', 'Farbe', '~HexColor', 3);
-        $this->EnableAction('Color');
+        if (!@$this->GetIDForIdent('Brightness')) {
+            $this->RegisterVariableInteger('Brightness', 'Helligkeit', '~Intensity.100', 2);
+            $this->EnableAction('Brightness');
+            $this->SetValue('Brightness', 100); // Standardhelligkeit
+            $isNewInstance = true;
+        }
 
-        $this->RegisterVariableInteger('ColorTemperature', 'Farbtemperatur', '', 4);
-        $this->EnableAction('ColorTemperature');
+        if (!@$this->GetIDForIdent('Color')) {
+            $this->RegisterVariableInteger('Color', 'Farbe', '~HexColor', 3);
+            $this->EnableAction('Color');
+            $this->SetValue('Color', 0xFFFFFF); // Standardfarbe Weiß
+            $isNewInstance = true;
+        }
 
-        // Aktuelle Werte der Variablen abrufen
-        $state = $this->GetValue('Status');
-        $colorTemperature = $this->GetValue('ColorTemperature');
-        $brightness = $this->GetValue('Brightness');
+        if (!@$this->GetIDForIdent('ColorTemperature')) {
+            $this->RegisterVariableInteger('ColorTemperature', 'Farbtemperatur', '', 4);
+            $this->EnableAction('ColorTemperature');
+            $this->SetValue('ColorTemperature', 3000); // Standardfarbtemperatur
+            $isNewInstance = true;
+        }
 
-        // Farbvariable abrufen und in RGB-Werte umwandeln
-        $color = $this->GetValue('Color');
-        $red = ($color >> 16) & 0xFF;
-        $green = ($color >> 8) & 0xFF;
-        $blue = $color & 0xFF;
-
-        // Entscheiden, ob Farbtemperatur oder Farbe gesetzt werden soll
-        if ($red == 255 && $green == 255 && $blue == 255) {
-            $this->SetAllAttributesWithTemperature($colorTemperature, $brightness);
+        // Wenn die Instanz neu ist, Standardwerte auf der Govee-LED setzen
+        if ($isNewInstance) {
+            $this->SwitchDevice(true);
+            $this->SetAllAttributesWithTemperature(3000, 100);
         } else {
-            $this->SetAllAttributesWithColor($brightness, $red, $green, $blue);
+            // Aktuelle Werte der Variablen abrufen
+            $state = $this->GetValue('Status');
+            $colorTemperature = $this->GetValue('ColorTemperature');
+            $brightness = $this->GetValue('Brightness');
+
+            // Farbvariable abrufen und in RGB-Werte umwandeln
+            $color = $this->GetValue('Color');
+            $red = ($color >> 16) & 0xFF;
+            $green = ($color >> 8) & 0xFF;
+            $blue = $color & 0xFF;
+
+            // Entscheiden, ob Farbtemperatur oder Farbe gesetzt werden soll
+            if ($red == 255 && $green == 255 && $blue == 255) {
+                $this->SetAllAttributesWithTemperature($colorTemperature, $brightness);
+            } else {
+                $this->SetAllAttributesWithColor($brightness, $red, $green, $blue);
+            }
         }
     }
+
 
     public function RequestAction($Ident, $Value)
     {
